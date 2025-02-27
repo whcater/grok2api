@@ -1,0 +1,24 @@
+# Dependencies
+/node_modules/
+
+# Runtime data
+/run/
+/run/*
+
+# Logs
+/logs/
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db 
+package-lock.json

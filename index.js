@@ -36,7 +36,7 @@ const CONFIG = {
         BODY_LIMIT: '5mb'
     },
     RETRY: {
-        MAX_ATTEMPTS: 2//重试次数
+        MAX_ATTEMPTS: 6//重试次数
     },
     SHOW_THINKING: process.env.SHOW_THINKING === 'true',
     IS_THINKING: false,
@@ -389,6 +389,9 @@ class GrokApiClient {
 
         // 移除<think>标签及其内容和base64图片
         const removeThinkTags = (text) => {
+            // 如果 text 为 null 或 undefined，返回空字符串
+            if (!text) return '';
+            
             text = text.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
             text = text.replace(/!\[image\]\(data:.*?base64,.*?\)/g, '[图片]');
             return text;
@@ -812,6 +815,7 @@ app.post('/v1/chat/completions', async (req, res) => {
         } else if (authToken !== CONFIG.API.API_KEY) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
+        console.log("req.body",req.body);
         let isTempCookie = req.body.model.includes("grok-2");
         let retryCount = 0;
         const grokClient = new GrokApiClient(req.body.model);
@@ -922,7 +926,7 @@ app.post('/v1/chat/completions', async (req, res) => {
                 }
             }
         }
-        throw new Error('当前模型所有令牌都已耗尽');
+        throw new Error('未知异常');
     } catch (error) {
         Logger.error(error, 'ChatAPI');
         res.status(500).json({

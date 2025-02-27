@@ -1,5 +1,7 @@
 
-# grok2API 接入指南：基于 Docker 的实现
+# grok2API 接入指南
+1. 基于 Docker 的实现
+2. 增加支持windows环境本地运行 npm run start
 
 ## 项目简介
 本项目提供了一种简单、高效的方式通过 Docker 部署 使用openAI的格式转换调用grok官网，进行api处理。
@@ -132,6 +134,13 @@ https://huggingface.co/spaces/yxmiler/GrokAPIService
 ## 补充说明
 - 如需使用流式生图的图像功能，需在[PicGo图床](https://www.picgo.net/)或者[tumy图床](https://tu.my/)申请API Key，前者似乎无法注册了，没有前面图床账号的可以选择后一个图床。
 - 自动移除历史消息里的think过程，同时如果历史消息里包含里base64图片文本，而不是通过文件上传的方式上传，则自动转换为[图片]占用符。
+
+# 第三方客户配置和使用
+- ## [CherryStudio](https://cherry-ai.com/) 
+1. setup
+![](https://raw.githubusercontent.com/whcater/pic-lib/main/image-1.png)
+2. usage
+![](https://raw.githubusercontent.com/whcater/pic-lib/main/image-2.png)
 
 ## 注意事项
 ⚠️ 本项目仅供学习和研究目的，请遵守相关使用条款。

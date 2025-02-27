@@ -1,0 +1,15 @@
+# 环境变量文件
+.env
+.env.local
+.env.*
+
+# 其他不需要的文件和目录
+node_modules
+npm-debug.log
+.git
+.gitignore
+.vscode
+.idea
+run/
+logs/
+*.log 
