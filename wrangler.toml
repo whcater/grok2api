@@ -1,0 +1,6 @@
+name = "grok2api-worker"
+compatibility_date = "2025-03-03"
+main = "worker.js"
+
+[env.production]
+vars = { PORT = "3000", API_KEY = "sk-123456" }
