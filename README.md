@@ -11,6 +11,21 @@
 克隆我的仓库：[grok2api](https://github.com/xLmiler/grok2api)
 ### 2. 部署选项
 
+#### 方式0：本地跑，楼主试过windows 更改CHROME_PATH可以run, mac只能用docker运行啦
+- 需要在项目根目录添加.env文件, 内容如下：
+- PICGO_KEY 、 SSO 和 CHROME_PATH 参数填上自己的
+``` text
+API_KEY=sk-123456
+PICGO_KEY=***
+IS_CUSTOM_SSO=false
+ISSHOW_SEARCH_RESULTS=false
+PORT=3000
+SHOW_THINKING=true
+SSO=xxx
+CHROME_PATH=C:\Program Files\Google\Chrome\Application\chrome.exe
+```
+- 加好.env文件后， 执行 npm run start就行了
+
 #### 方式A：直接使用Docker镜像
 ```bash
 docker run -it -d --name grok2api \

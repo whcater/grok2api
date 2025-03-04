@@ -3,4 +3,4 @@ compatibility_date = "2025-03-03"
 main = "worker.js"
 
 [env.production]
-vars = { PORT = "3000", API_KEY = "${API_KEY}" }
+vars = { PORT = "3000", APIKEY = "${API_KEY}" }

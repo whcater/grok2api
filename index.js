@@ -56,16 +56,21 @@ const DEFAULT_HEADERS = {
     'Connection': 'keep-alive',
     'origin': 'https://grok.com',
     'priority': 'u=1, i',
-    'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
+    'referer': 'https://grok.com/chat/b0173f8d-ad0e-40cc-8aa8-b8c447ceccb0',
+    'sec-ch-ua': '"Not(A:Brand";v="99", "Google Chrome";v="133", "Chromium";v="133"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-platform': '"Windows"',
     'sec-fetch-dest': 'empty',
     'sec-fetch-mode': 'cors',
     'sec-fetch-site': 'same-origin',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
-    'baggage': 'sentry-public_key=b311e0f2690c81f25e2c4cf6d4f7ce1c'
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
+    "sentry-trace": "dbf174b8366045c4be00efe60601180e-b6f580977a4f4d11-0",
+    "baggage": "sentry-environment=production,sentry-release=k9eBL2kXg1kUQMneqJ8ko,sentry-public_key=b311e0f2690c81f25e2c4cf6d4f7ce1c,sentry-trace_id=52e5476ac4834604b800f0bb97e7afea,sentry-sample_rate=0,sentry-sampled=false",
+    "sentry-trace":"52e5476ac4834604b800f0bb97e7afea-8f669845c5fc9056-0"
 };
 
+// ,
+//     'baggage': 'sentry-public_key=b311e0f2690c81f25e2c4cf6d4f7ce1c'
 
 async function initialization() {
     if (CONFIG.API.IS_CUSTOM_SSO) {
@@ -839,27 +844,42 @@ app.post('/v1/chat/completions', async (req, res) => {
             }
             Logger.info(`当前令牌索引: ${CONFIG.SSO_INDEX}`, 'Server');
             Logger.info(`当前令牌: ${JSON.stringify(CONFIG.API.SIGNATURE_COOKIE,null,2)}`, 'Server');
-            const newMessageReq = await fetch(`${CONFIG.API.BASE_URL}/api/rpc`, {
+            const newMessageReq = await fetch(`${CONFIG.API.BASE_URL}/rest/app-chat/conversations/new`, {
                 method: 'POST',
                 headers: {
                     ...DEFAULT_HEADERS,
                     ...CONFIG.API.SIGNATURE_COOKIE
                 },
                 body: JSON.stringify({
-                    rpc: "createConversation",
-                    req: {
-                        temporary: false
-                    }
+                    "temporary": false,
+                    "modelName": "grok-3",
+                    "message": "hi,grok",
+                    "fileAttachments": [],
+                    "imageAttachments": [],
+                    "disableSearch": false,
+                    "enableImageGeneration": true,
+                    "returnImageBytes": false,
+                    "returnRawGrokInXaiRequest": false,
+                    "enableImageStreaming": true,
+                    "imageGenerationCount": 2,
+                    "forceConcise": false,
+                    "toolOverrides": {},
+                    "enableSideBySide": true,
+                    "isPreset": false,
+                    "sendFinalMetadata": true,
+                    "deepsearchPreset": "",
+                    "isReasoning": false
                 })
             });
             let conversationId;
             var responseText2 = await newMessageReq.clone().text();
             if (newMessageReq.status === 200) {
                 const responseText = await newMessageReq.json();
-                conversationId = responseText.conversationId;
+                conversationId = responseText.result.conversation.conversationId;
             } else {
-                Logger.error(`创建会话响应错误: ${responseText2}`, 'Server');
-                throw new Error(`创建会话响应错误: ${responseText2}`);
+                console.log(newMessageReq.status);
+                // Logger.error(`创建会话响应错误: ${responseText2}`, 'Server');
+                // throw new Error(`创建会话响应错误: ${responseText2}`);
             }
 
             const response = await fetch(`${CONFIG.API.BASE_URL}/api/conversations/${conversationId}/responses`, {
